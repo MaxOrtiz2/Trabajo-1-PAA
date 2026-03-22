@@ -30,10 +30,20 @@ def cargar_recursos(nombre: str) -> list[Recurso]:
             recursos.append(Recurso(d[0], d[1:]))
     return recursos
 
+def ordenar_tareas_duracion(tareas: list[Tarea]) -> list[Tarea]:
+    return sorted(tareas, key=lambda tarea: tarea.duracion, reverse=True)
+
 def main():
     lista_tareas = cargar_tareas("tareas.txt")
     lista_recursos = cargar_recursos("recursos.txt")
-    print(f"Listos para procesar {len(lista_tareas)} tareas.")
+
+    lista_tareas = ordenar_tareas_duracion(lista_tareas)
+
+    print("Tareas ordenadas de mayor a menor duracion:")
+    for tarea in lista_tareas:
+        print(tarea.id_tarea, tarea.duracion, tarea.categoria)
+
+    print(f"Listos para procesar {len(lista_tareas)} tareas y {len(lista_recursos)} recursos.")
 
 if __name__ == "__main__":
     main()
