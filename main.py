@@ -33,6 +33,9 @@ def cargar_recursos(nombre: str) -> list[Recurso]:
 def ordenar_tareas_duracion(tareas: list[Tarea]) -> list[Tarea]:
     return sorted(tareas, key=lambda tarea: tarea.duracion, reverse=True)
 
+def recurso_para_tarea(tarea: Tarea, recurso: Recurso) -> bool:
+    return tarea.categoria in recurso.categorias_soportadas
+
 def main():
     lista_tareas = cargar_tareas("tareas.txt")
     lista_recursos = cargar_recursos("recursos.txt")
@@ -44,6 +47,14 @@ def main():
         print(tarea.id_tarea, tarea.duracion, tarea.categoria)
 
     print(f"Listos para procesar {len(lista_tareas)} tareas y {len(lista_recursos)} recursos.")
+
+    print("Recursos compatibles para cada tarea")
+    for tarea in lista_tareas:
+        print(f"\nTarea {tarea.id_tarea} ({tarea.categoria}):")
+        for recursos in lista_recursos:
+             if recurso_para_tarea(tarea, recursos):
+                 print(f"  - Compatible con {recursos.id_recurso}")
+
 
 if __name__ == "__main__":
     main()
