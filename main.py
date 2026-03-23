@@ -49,20 +49,7 @@ def main() -> None:
     lista_recursos = cargar_recursos("recursos.txt")
 
     lista_tareas = ordenar_tareas_duracion(lista_tareas)
-
-    print("Tareas ordenadas de mayor a menor duracion:")
-    for tarea in lista_tareas:
-        print(tarea.id_tarea, tarea.duracion, tarea.categoria)
-
-    print(f"Listos para procesar {len(lista_tareas)} tareas y {len(lista_recursos)} recursos.")
-
-    print("Recursos compatibles para cada tarea")
-    for tarea in lista_tareas:
-        print(f"\nTarea {tarea.id_tarea} ({tarea.categoria}):")
-        for recursos in lista_recursos:
-             if recurso_para_tarea(tarea, recursos):
-                 print(f"  - Compatible con {recursos.id_recurso}")
-    
+        
     for tarea in lista_tareas:
         recurso_elegido = None
         mejor_tiempo = float('inf')
