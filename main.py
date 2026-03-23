@@ -42,7 +42,9 @@ def guardar_resultado(tareas: list[Tarea], nombre_archivo: str):
             fila = f"{t.id_tarea},{t.recurso_asignado},{t.tiempo_inicio},{t.tiempo_inicio + t.duracion}\n"
             f.write(fila)
 
-def main():
+def main() -> None:
+    makespan_objetivo: int = int(sys.argv[1])
+
     lista_tareas = cargar_tareas("tareas.txt")
     lista_recursos = cargar_recursos("recursos.txt")
 
@@ -78,6 +80,16 @@ def main():
 
     guardar_resultado(lista_tareas, "output.txt")
     print("Cronograma generado en output.txt")
+
+    makespan_final = 0
+    for t in lista_tareas:
+        tiempo_termino = t.tiempo_inicio + t.duracion
+        if tiempo_termino > makespan_final:
+            makespan_final = tiempo_termino
+
+    print(f"\n--- Resumen de Ejecución ---")
+    print(f"Makespan Objetivo: {makespan_objetivo}")
+    print(f"Makespan Obtenido: {makespan_final}")
 
 if __name__ == "__main__":
     main()
