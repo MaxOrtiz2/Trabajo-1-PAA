@@ -36,6 +36,12 @@ def ordenar_tareas_duracion(tareas: list[Tarea]) -> list[Tarea]:
 def recurso_para_tarea(tarea: Tarea, recurso: Recurso) -> bool:
     return tarea.categoria in recurso.categorias_soportadas
 
+def guardar_resultado(tareas: list[Tarea], nombre_archivo: str):
+    with open(nombre_archivo, "w") as f:
+        for t in tareas:
+            fila = f"{t.id_tarea},{t.recurso_asignado},{t.tiempo_inicio},{t.tiempo_inicio + t.duracion}\n"
+            f.write(fila)
+
 def main():
     lista_tareas = cargar_tareas("tareas.txt")
     lista_recursos = cargar_recursos("recursos.txt")
@@ -54,7 +60,24 @@ def main():
         for recursos in lista_recursos:
              if recurso_para_tarea(tarea, recursos):
                  print(f"  - Compatible con {recursos.id_recurso}")
+    
+    for tarea in lista_tareas:
+        recurso_elegido = None
+        mejor_tiempo = float('inf')
 
+        for recurso in lista_recursos:
+            if recurso_para_tarea(tarea, recurso):
+                if recurso.tiempo_disponible < mejor_tiempo:
+                    mejor_tiempo = recurso.tiempo_disponible
+                    recurso_elegido = recurso
+
+        if recurso_elegido:
+            tarea.recurso_asignado = recurso_elegido.id_recurso
+            tarea.tiempo_inicio = recurso_elegido.tiempo_disponible
+            recurso_elegido.tiempo_disponible += tarea.duracion
+
+    guardar_resultado(lista_tareas, "output.txt")
+    print("Cronograma generado en output.txt")
 
 if __name__ == "__main__":
     main()

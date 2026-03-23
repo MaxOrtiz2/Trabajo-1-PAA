@@ -1,7 +1,7 @@
 # Proyecto 1 — Planificación de Tareas
 Integrantes:
 - Raul Bizama
--Maximiliano Ortiz
+- Maximiliano Ortiz
 
 ## Cómo ejecutar
 1. Crear virtual environment: `python -m venv .venv`
