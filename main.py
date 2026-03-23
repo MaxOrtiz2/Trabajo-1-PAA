@@ -45,21 +45,18 @@ def guardar_resultado(tareas: list[Tarea], nombre_archivo: str):
 def main() -> None:
     makespan_objetivo: int = int(sys.argv[1])
 
-    lista_tareas = cargar_tareas("tareas.txt")
-    lista_recursos = cargar_recursos("recursos.txt")
-
+    lista_tareas = cargar_tareas("tareas_EP.txt")
+    lista_recursos = cargar_recursos("recursos_EP.txt")
     lista_tareas = ordenar_tareas_duracion(lista_tareas)
         
     for tarea in lista_tareas:
         recurso_elegido = None
         mejor_tiempo = float('inf')
-
         for recurso in lista_recursos:
             if recurso_para_tarea(tarea, recurso):
                 if recurso.tiempo_disponible < mejor_tiempo:
                     mejor_tiempo = recurso.tiempo_disponible
                     recurso_elegido = recurso
-
         if recurso_elegido:
             tarea.recurso_asignado = recurso_elegido.id_recurso
             tarea.tiempo_inicio = recurso_elegido.tiempo_disponible
