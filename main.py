@@ -45,8 +45,8 @@ def guardar_resultado(tareas: list[Tarea], nombre_archivo: str):
 def main() -> None:
     makespan_objetivo: int = int(sys.argv[1])
 
-    lista_tareas = cargar_tareas("tareas_EP.txt")
-    lista_recursos = cargar_recursos("recursos_EP.txt")
+    lista_tareas = cargar_tareas("tareas.txt")
+    lista_recursos = cargar_recursos("recursos.txt")
     lista_tareas = ordenar_tareas_duracion(lista_tareas)
         
     for tarea in lista_tareas:
