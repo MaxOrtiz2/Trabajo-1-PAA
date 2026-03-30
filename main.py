@@ -7,6 +7,7 @@ class Tarea:
         self.categoria: str = categoria
         self.tiempo_inicio: int = 0 
         self.recurso_asignado: str = ""
+        self.N_recursos_compatibles: int = 0
 
 class Recurso:
     def __init__(self, id_recurso: str, categorias: list[str]):
@@ -30,11 +31,22 @@ def cargar_recursos(nombre: str) -> list[Recurso]:
             recursos.append(Recurso(d[0], d[1:]))
     return recursos
 
-def ordenar_tareas_duracion(tareas: list[Tarea]) -> list[Tarea]:
-    return sorted(tareas, key=lambda tarea: tarea.duracion, reverse=True)
+def ordenar_tareas_scarcity_first(tareas: list[Tarea]) -> list[Tarea]:
+    return sorted(
+        tareas,
+        key=lambda tarea: (tarea.N_recursos_compatibles, -tarea.duracion)
+    )
 
 def recurso_para_tarea(tarea: Tarea, recurso: Recurso) -> bool:
     return tarea.categoria in recurso.categorias_soportadas
+
+def contar_recursos_compatibles(tareas: list[Tarea], recursos: list[Recurso]) -> None:
+    for tarea in tareas:
+        contador = 0
+        for recurso in recursos:
+            if recurso_para_tarea(tarea, recurso):
+                contador += 1
+        tarea.N_recursos_compatibles = contador   
 
 def guardar_resultado(tareas: list[Tarea], nombre_archivo: str):
     with open(nombre_archivo, "w") as f:
@@ -47,7 +59,9 @@ def main() -> None:
 
     lista_tareas = cargar_tareas("tareas.txt")
     lista_recursos = cargar_recursos("recursos.txt")
-    lista_tareas = ordenar_tareas_duracion(lista_tareas)
+
+    contar_recursos_compatibles(lista_tareas, lista_recursos)
+    lista_tareas = ordenar_tareas_scarcity_first(lista_tareas)
         
     for tarea in lista_tareas:
         recurso_elegido = None
